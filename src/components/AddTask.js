@@ -1,16 +1,28 @@
 import React from 'react'
 import { useState } from 'react';
+import { useEffect } from 'react';
 import Card from './Card';
 
 const AddTask = () => {
 
     const [task, settask] = useState("");
+    //We should use local storage as a server and maintain a use state of array and whenever something happens update it. map through this array only not the local storage one.
+
+    const [clientarray, setClientarray] = useState([]);
+
+
     const handleOnChange = (e)=>{
         settask(e.target.value);
-        // console.log(task);
     }
 
-    
+    useEffect(() => {
+        
+        if (localStorage.getItem("tasks")) {
+            setClientarray(JSON.parse(localStorage.getItem("tasks")));
+        }
+
+    }, [])
+
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -18,12 +30,18 @@ const AddTask = () => {
             let taskArr = [];
             taskArr.push(task);
             localStorage.setItem("tasks", JSON.stringify(taskArr));
+
+            //client side
+            setClientarray(JSON.parse(localStorage.getItem("tasks")));
             settask("");
         }
         else{ //if there already is such array
             let taskUpdatedArr = JSON.parse(localStorage.getItem("tasks"));
             taskUpdatedArr.push(task);
             localStorage.setItem("tasks", JSON.stringify(taskUpdatedArr));
+
+            //client side
+            setClientarray(JSON.parse(localStorage.getItem("tasks")));
             settask("");
         }
     }
@@ -40,9 +58,9 @@ const AddTask = () => {
             </form>
 
             <div className="container row my-3 mx-3">
-                {JSON.parse(localStorage.getItem("tasks")) ? JSON.parse(localStorage.getItem("tasks")).map((elem, index) =>{
-                    return <Card key={index} taskTextProp = {elem} stateProp = {task} setStateProp = {settask} indexProp = {index}/>;
-                }) : "Nothing to show."}
+                {clientarray.length !== 0 ? clientarray.map((elem, index) =>{
+                    return <Card key={index} taskTextProp = {elem} stateProp = {task} setStateProp = {settask} indexProp = {index} clientArrayProp = {clientarray} setClientArrayProp = {setClientarray} />;
+                }) : "No tasks, yet."}
             </div>
         </div>
     )

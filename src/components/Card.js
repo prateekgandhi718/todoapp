@@ -2,21 +2,20 @@ import React from 'react'
 
 const Card = (props) => {
 
-    const handleOnClick = (e) =>{
-        e.preventDefault();
-        let element = props.taskTextProp;
-        // console.log(element);
+    const handleOnClick = (ind) =>{
         let array = JSON.parse(localStorage.getItem("tasks"));
-        let index = array.indexOf(element);
-        array.splice(index, 1);
+        array.splice(ind, 1);
         localStorage.setItem("tasks", JSON.stringify(array));
+
+        //client side
+        props.setClientArrayProp(JSON.parse(localStorage.getItem("tasks")));
         props.setStateProp(" ");
     }
     return (
         <div className="card" style={{ width: "18rem" }} >
             <div className="card-body">
                 <p className="card-text">{props.taskTextProp}</p>
-                <i className="far fa-check-circle" style = {{cursor: "pointer"}} onClick = {handleOnClick}></i>
+                <i className="far fa-check-circle" style = {{cursor: "pointer"}} onClick = {() => handleOnClick(props.indexProp)}></i>
             </div>
         </div>
     )
