@@ -39,9 +39,9 @@ const AddTask = () => {
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
 
-            <div className="container">
+            <div className="container row my-3 mx-3">
                 {JSON.parse(localStorage.getItem("tasks")) ? JSON.parse(localStorage.getItem("tasks")).map((elem, index) =>{
-                    return <Card key={index} taskTextProp = {elem}/>;
+                    return <Card key={index} taskTextProp = {elem} stateProp = {task} setStateProp = {settask} indexProp = {index}/>;
                 }) : "Nothing to show."}
             </div>
         </div>
